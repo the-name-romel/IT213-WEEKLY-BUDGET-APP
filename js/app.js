@@ -29,8 +29,25 @@ class HTML{
             //Clear the Error
             setTimeout(function() {
                 document.querySelector('.primary .alert').remove();
-                addExpenseForm.reset();
+                //addExpenseForm.reset();
             }, 3000); 
+        }
+        //Displays the expenses from the form into the list
+        addExpenseToList(name, amount) {
+            const expensesList = document.querySelector('#expenses ul');
+
+            //Create li
+            const li = document.createElement('li');
+            li.className ="list-group-item d-flex justify-content-between align-items-center";
+        
+            //Create the template
+            li.innerHTML = `
+                ${name}
+                <span class="badge badge-primary badge-pill">$ ${amount}</span>
+            `;
+
+            //Insert into HTML
+            expensesList.appendChild(li);
         }
 
 }
@@ -78,7 +95,9 @@ function eventListeners() {
             html.printMessage('There was an error, all the fields are mandatory', 
             'alert-danger');
         } else {
-            console.log('Correct');
+            //Add the expenses into the list
+            html.addExpenseToList(expenseName, amount);
+
         }
     });
 }
