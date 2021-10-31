@@ -5,6 +5,12 @@ class Budget {
         this.budget = Number (budget);
         this.budgetLeft = this.budget;
     }
+
+    //Substract from the budget
+    substractFromBudget(amount) {
+        return this.budgetLeft -= amount;
+    }
+    
 }
 
 //Everything related to HTML
@@ -29,7 +35,7 @@ class HTML{
             //Clear the Error
             setTimeout(function() {
                 document.querySelector('.primary .alert').remove();
-                //addExpenseForm.reset();
+                addExpenseForm.reset();
             }, 3000); 
         }
         //Displays the expenses from the form into the list
@@ -49,7 +55,25 @@ class HTML{
             //Insert into HTML
             expensesList.appendChild(li);
         }
+        //Subtract expense amount from budget
+        trackBudget(amount) {
+            const budgetLeftDollars = budget.substractFromBudget(amount);
+            budgetLeft.innerHTML = `${budgetLeftDollars}`;
 
+            //Check when 25% is spent
+
+            if( (budget.budget / 4 ) > budgetLeftDollars ) {
+                budgetLeft.parentElement.parentElement.classList.remove('alert-success', 
+                'alert-warning');
+                budgetLeft.parentElement.parentElement.classList.add('alert-danger');
+
+            } else if( (budget.budget / 2 ) > budgetLeftDollars ) {
+                budgetLeft.parentElement.parentElement.classList.remove('alert-success');
+                budgetLeft.parentElement.parentElement.classList.add('alert-warning');
+
+            }
+            
+        }
 }
 
 
@@ -97,7 +121,9 @@ function eventListeners() {
         } else {
             //Add the expenses into the list
             html.addExpenseToList(expenseName, amount);
-
+            html.trackBudget(amount);
+            html.printMessage('Added...', 'alert-success');
+            
         }
     });
 }
